@@ -10,7 +10,12 @@ void HvAOpenWiFi::connectWiFi(){
     delay(500);
     Serial.print(".");
   }   
+ 
 
+  _gatewayIP = WiFi.gatewayIP().toString();
+  _localIP = WiFi.localIP().toString();
+  _subnetMask = WiFi.subnetMask().toString();
+  _dns = = WiFi.dnsIP().toString();
 }
 
 void HvAOpenWiFi::begin(){

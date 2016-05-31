@@ -10,18 +10,11 @@ public:
 	void connectWiFi();
 	void connectHotspot();
 	void begin();
-	void statusReport();
-	
+		
 private:
-    String performRequest(String host, uint16_t port, String request);
+    String _performRequest(String host, uint16_t port, String request);
 
-    bool _firstTimeConnected = false;
-    String initialRequest;
-    String postRequest;
-
-    String _redirHost, _redirURI;
-    uint16_t _redirPort;
-
+    String   _gatewayIP, _localIP, _subnetMask, _dns;
 
 };
 
