@@ -1,19 +1,19 @@
-#include "HvAOpenWiFi.h"
+#include "OpenWiFi.h"
 #include <ESP8266HTTPClient.h>
 
-HvAOpenWiFi hotspot;
+OpenWiFi hotspot;
 
 void setup() {
 
   Serial.begin(115200);
   delay(10);
 
-  hotspot.begin();
+  hotspot.begin("HomeNetwork", "HomePassword");
 }
 
 void loop() {
   HTTPClient http;
-  http.begin("http://gps.buienradar.nl/getrr.php?lat=52.3592959&lon=4.9081197");
+  http.begin("http://gadgets.buienradar.nl/data/raintext?lat=52.3409792&lon=4.9077414");
   uint16_t httpCode = http.GET();
   String response;
 
@@ -22,11 +22,10 @@ void loop() {
     Serial.println(response);
   }
   else
-    hotspot.begin();
+     ESP.reset();
 
   http.end();
 
   
   delay(60*1000*5);  
 }
-
