@@ -13,7 +13,8 @@ public:
 	bool begin(String backupSSID, String backupPassword);
 	void setConnectionTimeout(uint16_t connectionTimeout);
 	bool isConnected();
-
+    void debugMessage(String message);
+  
 private:
     String _performRequest(String host, uint16_t port, String request);
 

@@ -1,6 +1,8 @@
 #include "OpenWiFi.h"
 #include <ESP8266WiFi.h>
 
+#define NSUFFIX_CHARS 11
+
 bool OpenWiFi::begin(String backupSSID, String backupPassword){
 
   // Assume not to use backup network
@@ -14,9 +16,9 @@ bool OpenWiFi::begin(String backupSSID, String backupPassword){
   for (int iSSID = 0; iSSID < nNetworks; ++iSSID){
     String ssid = WiFi.SSID(iSSID);
     Serial.println(ssid);
-    if (ssid.equals("HvA Open Wi-Fi") || ssid.equals("UvA Open Wi-Fi")){
+    if (ssid.endsWith(" Open Wi-Fi")){
       _ssid = ssid; 
-      _organization = ssid.substring(0, 3);
+      _organization = ssid.substring(0, ssid.length() - NSUFFIX_CHARS);
     }
   }
 
@@ -58,15 +60,13 @@ bool OpenWiFi::connectWiFi(){
 
   // Success
   if (isConnected()){
-    Serial.println();
-
     _gatewayIP = WiFi.gatewayIP().toString();
     _localIP = WiFi.localIP().toString();
     _subnetMask = WiFi.subnetMask().toString();
     _dns = WiFi.dnsIP().toString();
   }
   else {
-    Serial.println("'Could not connect to HvA or UvA Open WiFi or backup network.");
+    debugMessage("'Could not connect to Open WiFi or backup network.");
   }
 
   return isConnected();
@@ -88,7 +88,7 @@ void OpenWiFi::connectHotspot() {
     // Perform the POST ("press the "connect" button)
   _performRequest(_gatewayIP, 8002, request);
 
-  Serial.println(request);
+  debugMessage(request);
 }
 
 void OpenWiFi::setConnectionTimeout(uint16_t connectionTimeout){
@@ -103,13 +103,13 @@ bool OpenWiFi::isConnected(){
 String OpenWiFi::_performRequest(String host, uint16_t port, String request)
 {
 
-  Serial.println(String("connecting to ") + host);
+  debugMessage(String("connecting to ") + host);
 
   WiFiClient client;
   String response;
 
   if (!client.connect(host.c_str(), port)) {
-    Serial.println("connection failed");
+    debugMessage("connection failed");
     return "";
   }
 
@@ -118,7 +118,7 @@ String OpenWiFi::_performRequest(String host, uint16_t port, String request)
   unsigned long timeout = millis();
   while (client.available() == 0)
     if (millis() - timeout > 5000) {
-      Serial.println(">>> Client Timeout !");
+      debugMessage(">>> Client Timeout !");
       client.stop();
       return "";
     } 
@@ -129,4 +129,8 @@ String OpenWiFi::_performRequest(String host, uint16_t port, String request)
 
   return response;
 
+}
+
+void OpenWiFi::debugMessage(String message){
+  Serial.println(String("OW:" + message));
 }
