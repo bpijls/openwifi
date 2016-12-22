@@ -7,6 +7,8 @@ bool OpenWiFi::begin(String backupSSID, String backupPassword){
 
   // Assume not to use backup network
   _useBackup = false;
+  _backupSSID = backupSSID;
+  _backupPassword = backupPassword;
 
   // Stop trying to connect after 15000 milliseconds  
   _connectionTimeout = 20000;
@@ -21,15 +23,13 @@ bool OpenWiFi::begin(String backupSSID, String backupPassword){
       _organization = ssid.substring(0, ssid.length() - NSUFFIX_CHARS);
     }
   }
-
+  
   // If HvA or UvA network has not been found, use backup network
   if (_ssid.length() == 0){
     _ssid = _backupSSID;
     _password = _backupPassword;
     _useBackup = true;
-  }
-
-  Serial.println("Refreshing WiFi connection.");
+  }  
   
   if (connectWiFi()){
     // only register to captive portal if on UvA or HvA network
