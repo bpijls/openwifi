@@ -1,3 +1,8 @@
+/*
+  OpenWiFi.h - Library for using the HvA OpenWiFi accesspoint
+*/
+#ifndef OpenWifi_h
+#define OpenWifi_h
 
 #pragma once
 
@@ -27,3 +32,4 @@ private:
 
 };
 
+#endif
