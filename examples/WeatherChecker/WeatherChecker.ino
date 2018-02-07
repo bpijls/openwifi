@@ -14,7 +14,7 @@ void setup() {
 
 void loop() {
   HTTPClient http;
-  http.begin("http://gadgets.buienradar.nl/data/raintext/?lat=52.34&lon=4.91");
+  http.begin("http://br-gpsgadget-new.azurewebsites.net/data/raintext/?lat=52.34&lon=4.91");
   {
     uint16_t httpCode = http.GET();
     String response = http.getString();
