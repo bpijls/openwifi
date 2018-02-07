@@ -15,7 +15,7 @@ public:
 	
 	bool connectWiFi();
 	void connectHotspot();
-	bool begin(String backupSSID, String backupPassword, bool forceBackup);
+	bool begin(String backupSSID, String backupPassword, bool forceBackup = false);
 	void setConnectionTimeout(uint16_t connectionTimeout);
 	bool isConnected();
     void debugMessage(String message);
