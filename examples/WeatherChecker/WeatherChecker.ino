@@ -14,10 +14,11 @@ void setup() {
 
 void loop() {
   HTTPClient http;
-  http.begin("http://br-gpsgadget-new.azurewebsites.net/data/raintext/?lat=52.34&lon=4.91");
+  http.begin("http://icu.feib.nl/get_connections.php");
   {
     uint16_t httpCode = http.GET();
     String response = http.getString();
+    Serial.println(httpCode);
     Serial.println(response);
 
     if (httpCode != 200) ESP.reset();
