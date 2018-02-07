@@ -3,7 +3,7 @@
 
 #define NSUFFIX_CHARS 11
 
-bool OpenWiFi::begin(String backupSSID, String backupPassword){
+bool OpenWiFi::begin(String backupSSID, String backupPassword, bool forceBackup){
 
   // Assume not to use backup network
   _useBackup = false;
@@ -13,20 +13,26 @@ bool OpenWiFi::begin(String backupSSID, String backupPassword){
   // Stop trying to connect after 15000 milliseconds  
   _connectionTimeout = 20000;
 
-  // Scan for HvA or UvA networks
-  int nNetworks= WiFi.scanNetworks();
-  for (int iSSID = 0; iSSID < nNetworks; ++iSSID){
-    String ssid = WiFi.SSID(iSSID);
-    Serial.println(ssid);
-    if (ssid.endsWith(" Open Wi-Fi")){
-      _ssid = ssid; 
-      _organization = ssid.substring(0, ssid.length() - NSUFFIX_CHARS);
+  if (!forceBackup){
+    // Scan for HvA or UvA networks
+    int nNetworks= WiFi.scanNetworks();
+    for (int iSSID = 0; iSSID < nNetworks; ++iSSID){
+      String ssid = WiFi.SSID(iSSID);
+      Serial.println(ssid);
+      if (ssid.endsWith(" Open Wi-Fi")){
+        _ssid = ssid; 
+        _organization = ssid.substring(0, ssid.length() - NSUFFIX_CHARS);
+      }
     }
+    _useHotspot =  _ssid.length() > 0;
+    _useBackup = _backupSSID.length() > 0 ;
   }
-  
+  else{
+    _useBackup = true;
+    _useHotspot = false;
+  }
  
-  _useHotspot =  _ssid.length() > 0;
-  _useBackup = _backupSSID.length() > 0 ;
+  
   // If HvA or UvA network has not been found, use backup network
   if (!_useHotspot){ // unless ssid and pw are empty
     if (_useBackup){
