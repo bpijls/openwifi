@@ -24,11 +24,21 @@ bool OpenWiFi::begin(String backupSSID, String backupPassword){
     }
   }
   
+ 
+  _useHotspot =  _ssid.length() > 0;
+  _useBackup = _backupSSID.length() > 0 ;
   // If HvA or UvA network has not been found, use backup network
-  if (_ssid.length() == 0){
-    _ssid = _backupSSID;
-    _password = _backupPassword;
-    _useBackup = true;
+  if (!_useHotspot){ // unless ssid and pw are empty
+    if (_useBackup){
+      _ssid = _backupSSID;
+      _password = _backupPassword;
+      _useBackup = true;
+      Serial.println("No HVA or UVA hotspot found. Using backup network.");
+    }
+    else{
+      Serial.println("No suitable networks found.");
+      return false;
+    }
   }  
   
   if (connectWiFi()){

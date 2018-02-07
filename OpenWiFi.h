@@ -27,7 +27,7 @@ private:
     String _organization;
     // Connection Information
     String   _gatewayIP, _localIP, _subnetMask, _dns, _ssid, _password, _backupSSID, _backupPassword;
-    bool _useBackup;
+    bool _useBackup, _useHotspot;
     uint16_t _connectionTimeout;
 
 };
